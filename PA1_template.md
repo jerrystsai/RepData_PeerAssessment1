@@ -49,7 +49,8 @@ by_date <- ddply(activityDF, .(Rdate), summarize, steps=sum(steps, na.rm=TRUE))
 ## setnames(by_date, c("date", "steps") )
 
 library(ggplot2)
-qplot(steps, data=by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
+qplot(steps, data=by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", 
+      main="Steps each day")
 ```
 
 ![plot of chunk total_steps_histogram](figure/total_steps_histogram.png) 
@@ -178,7 +179,8 @@ A histogram displayed below shows the distribution of the number of steps taken 
 
 imputed_by_date <- ddply(imputedDF, .(Rdate), summarize, steps=sum(steps, na.rm=TRUE))
 
-qplot(steps, data=imputed_by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
+qplot(steps, data=imputed_by_date, geom="histogram", binwidth=2500, 
+      xlab="Total # of Steps per Day", main="Steps each day")
 ```
 
 ![plot of chunk imputation_histogram](figure/imputation_histogram.png) 
@@ -217,7 +219,9 @@ ggplot(combo_set, aes(steps, fill=source)) +
 #    given date is a weekday or weekend day.
 #
 
-weekdayDF <- transform(sortedDF, dayFlag = as.factor(ifelse(weekdays(sortedDF$Rdate) %in% c("Saturday","Sunday"), "Weekend", "Weekday")) )
+weekdayDF <- transform(sortedDF, 
+                       dayFlag = as.factor(ifelse(weekdays(sortedDF$Rdate) %in% 
+                                 c("Saturday","Sunday"), "Weekend", "Weekday")) )
 
 ## Check work: validated
 ## head(weekdayDF)
