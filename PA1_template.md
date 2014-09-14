@@ -1,6 +1,10 @@
 # Reproducible Research: Peer Assessment 1
 
 
+```r
+opts_chunk$set(echo=TRUE)
+```
+
 ## Loading and preprocessing the data
 
 
@@ -8,7 +12,7 @@
 ##
 ## 1) Load the data (i.e. read.csv())
 ## 2) Process/transform the data (if necessary) into 
-##    a format suitable for your analysis
+##    a format suitable for your analysisgetw
 ##
 
 ## setwd("/Users/JerryTsai/userjst/individ/knowledg/cur/jhu.sph/ds05_reproducible/projects/project01/RepData_PeerAssessment1")
@@ -48,7 +52,7 @@ library(ggplot2)
 qplot(steps, data=by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
 ```
 
-![plot of chunk total_steps_histogram](./PA1_template_files/figure-html/total_steps_histogram.png) 
+![plot of chunk total_steps_histogram](figure/total_steps_histogram.png) 
 
 
 ```r
@@ -88,7 +92,7 @@ ggplot(by_interval, aes(interval, mean_steps)) +
     ggtitle("Average # of Steps Taken Across a Day")
 ```
 
-![plot of chunk times_series](./PA1_template_files/figure-html/times_series.png) 
+![plot of chunk times_series](figure/times_series.png) 
 
 
 ```r
@@ -177,7 +181,7 @@ imputed_by_date <- ddply(imputedDF, .(Rdate), summarize, steps=sum(steps, na.rm=
 qplot(steps, data=imputed_by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
 ```
 
-![plot of chunk imputation_histogram](./PA1_template_files/figure-html/imputation_histogram.png) 
+![plot of chunk imputation_histogram](figure/imputation_histogram.png) 
 
 ```r
 imputed_median_steps_per_day <- median(imputed_by_date$steps, na.rm=TRUE)
@@ -200,7 +204,7 @@ ggplot(combo_set, aes(steps, fill=source)) +
     ggtitle("Actual vs. Imputed, Overlaid") 
 ```
 
-![plot of chunk overlaid](./PA1_template_files/figure-html/overlaid.png) 
+![plot of chunk overlaid](figure/overlaid.png) 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -244,6 +248,6 @@ ggplot(by_dayFlag_interval, aes(interval, mean_steps)) +
     ylab("Number of steps")
 ```
 
-![plot of chunk panel_plot](./PA1_template_files/figure-html/panel_plot.png) 
+![plot of chunk panel_plot](figure/panel_plot.png) 
 
 Using the imputed data, on average, the person is more active during weekends than weekdays, particularly after 10am.
