@@ -1,14 +1,10 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document: 
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
-```{r loading_preproc}
+
+```r
 ##
 ## 1) Load the data (i.e. read.csv())
 ## 2) Process/transform the data (if necessary) into 
@@ -31,7 +27,8 @@ Note that unless otherwise stated, calculations will ignore missing values for t
 
 A histogram displayed below shows the distribution of the number of steps taken each day.
 
-```{r total_steps_histogram, fig.height=4, fig.width=5}
+
+```r
 ##
 ## 1) Make a histogram of the total number of steps taken each day
 ##
@@ -51,7 +48,10 @@ library(ggplot2)
 qplot(steps, data=by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
 ```
 
-```{r mean_total_steps}
+![plot of chunk total_steps_histogram](./PA1_template_files/figure-html/total_steps_histogram.png) 
+
+
+```r
 ##
 ## 2) Calculate and report the mean and median 
 ##    total number of steps taken per day
@@ -63,14 +63,15 @@ median_steps_per_day <- median(by_date$steps, na.rm=TRUE)
 mean_steps_per_day <- as.integer(round(mean(by_date$steps, na.rm=TRUE)))
 ```
 
-The mean number of steps taken per day is `r formatC(mean_steps_per_day, format="d", big.mark=",")`, and the median number of steps taken per day is `r formatC(median_steps_per_day, format="d", big.mark=",")`.  
+The mean number of steps taken per day is 9,354, and the median number of steps taken per day is 10,395.  
   
 
 ## What is the average daily activity pattern?
 
 A time series plot of the average number of steps taken in every 5-minute interval is displayed below:
 
-```{r times_series, fig.height=4, fig.width=5}
+
+```r
 ##
 ## 1) Make a time series plot (i.e. type = "l") of the 
 ##    5-minute interval (x-axis) and the average number of 
@@ -87,7 +88,10 @@ ggplot(by_interval, aes(interval, mean_steps)) +
     ggtitle("Average # of Steps Taken Across a Day")
 ```
 
-```{r max_steps_interval}
+![plot of chunk times_series](./PA1_template_files/figure-html/times_series.png) 
+
+
+```r
 ##
 ## 2) Which 5-minute interval, on average across all the 
 ##    days in the dataset, contains the maximum number of steps?
@@ -95,12 +99,13 @@ ggplot(by_interval, aes(interval, mean_steps)) +
 max_mean_steps_row <- by_interval[which.max(by_interval$mean_steps),]
 ```
 
-The 5-minute interval in which the most steps were taken on average was `r formatC(max_mean_steps_row$interval, format="d", big.mark=",")`, with an average of `r formatC(round(max_mean_steps_row$mean_steps), format="d", big.mark=",")` steps taken during that interval.  
+The 5-minute interval in which the most steps were taken on average was 835, with an average of 206 steps taken during that interval.  
 
 
 ## Imputing missing values
 
-```{r number_of_NAs}
+
+```r
 ##
 ## 1) Calculate and report the total number of missing values 
 ##    in the dataset (i.e. the total number of rows with NAs)
@@ -109,11 +114,12 @@ The 5-minute interval in which the most steps were taken on average was `r forma
 number_of_NA <- sum(is.na(activityDF$steps))
 ```
 
-Out of `r formatC(nrow(activityDF), format="d", big.mark=",")` rows, the missing values in the dataset number `r formatC(number_of_NA, format="d", big.mark=",")`.
+Out of 17,568 rows, the missing values in the dataset number 2,304.
 
 Missing values for the number of steps taken in a 5-minute interval will be imputed, using the mean of the non-missing values for number of steps taken in the same interval.
 
-```{r imputation}
+
+```r
 ##
 ## 2) Devise a strategy for filling in all of the missing values 
 ##    in the dataset
@@ -140,7 +146,13 @@ names(graft_info)[names(graft_info)=="mean_steps"] <- "steps"
 
 ## Combine rows with imputed data with rows with actual data in one data frame
 imputedDF <- join(graft_info, activityDF[which(!is.na(activityDF$steps)), ], type="full")
+```
 
+```
+## Joining by: interval, steps, date, Rdate
+```
+
+```r
 sortedDF <- imputedDF[order(imputedDF$Rdate, imputedDF$interval), ]
 
 # Check to see if there are any missing values for step
@@ -150,7 +162,8 @@ sortedDF <- imputedDF[order(imputedDF$Rdate, imputedDF$interval), ]
 
 A histogram displayed below shows the distribution of the number of steps taken each day, using the imputed data.
 
-```{r imputation_histogram, fig.height=4, fig.width=5}
+
+```r
 ##
 ## 4) Make a histogram of the total number of steps taken 
 ##    each day and Calculate and report the mean and median 
@@ -162,18 +175,23 @@ A histogram displayed below shows the distribution of the number of steps taken 
 imputed_by_date <- ddply(imputedDF, .(Rdate), summarize, steps=sum(steps, na.rm=TRUE))
 
 qplot(steps, data=imputed_by_date, geom="histogram", binwidth=2500, xlab="Total # of Steps per Day", main="Steps each day")
+```
 
+![plot of chunk imputation_histogram](./PA1_template_files/figure-html/imputation_histogram.png) 
+
+```r
 imputed_median_steps_per_day <- median(imputed_by_date$steps, na.rm=TRUE)
 imputed_mean_steps_per_day <- as.integer(round(mean(imputed_by_date$steps, na.rm=TRUE)))
 ```
 
-The mean number of steps taken per day, using imputed data, is `r formatC(imputed_mean_steps_per_day, format="d", big.mark=",")`, and the median number of steps taken per day, using imputed data, is `r formatC(imputed_median_steps_per_day, format="d", big.mark=",")`. 
+The mean number of steps taken per day, using imputed data, is 10,766, and the median number of steps taken per day, using imputed data, is 10,766. 
   
-The mean and median, using the imputed data, of the total number of steps each day differs from the mean and median using only actual data. Imputation has increased the mean from `r formatC(mean_steps_per_day, format="d", big.mark=",")` to `r formatC(imputed_mean_steps_per_day, format="d", big.mark=",")`. The median also increased, from  `r formatC(median_steps_per_day, format="d", big.mark=",")` to  `r formatC(imputed_median_steps_per_day, format="d", big.mark=",")`.  
+The mean and median, using the imputed data, of the total number of steps each day differs from the mean and median using only actual data. Imputation has increased the mean from 9,354 to 10,766. The median also increased, from  10,395 to  10,766.  
   
 After imputation, the distribution of the total number of steps taken each day has generally increased. You can see this in the plot below, where the actual and imputed histograms have been overlaid. The actual distribution, which is left-skewed with a prominent bump near 0, shifts in skew toward symmetry after data are imputed for missing values.
 
-```{r overlaid, fig.height=4, fig.width=6}
+
+```r
 combo_set <- rbind(cbind(by_date, source="actual"), 
                    cbind(imputed_by_date, source="imputed"))
 
@@ -182,10 +200,13 @@ ggplot(combo_set, aes(steps, fill=source)) +
     ggtitle("Actual vs. Imputed, Overlaid") 
 ```
 
+![plot of chunk overlaid](./PA1_template_files/figure-html/overlaid.png) 
+
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r weekdays}
+
+```r
 #
 # 1) Create a new factor variable in the dataset with two 
 #    levels -- "weekday" and "weekend" indicating whether a 
@@ -201,7 +222,8 @@ weekdayDF <- transform(sortedDF, dayFlag = as.factor(ifelse(weekdays(sortedDF$Rd
 
 A comparison of weekday and weekend activity is displayed below:
 
-```{r panel_plot}
+
+```r
 ##
 ## 2) Make a panel plot containing a time series plot 
 ##    (i.e. type = "l") of the 5-minute interval (x-axis) and 
@@ -220,7 +242,8 @@ ggplot(by_dayFlag_interval, aes(interval, mean_steps)) +
     facet_wrap( ~dayFlag, nrow=2) +
     xlab("Interval") +
     ylab("Number of steps")
-
 ```
+
+![plot of chunk panel_plot](./PA1_template_files/figure-html/panel_plot.png) 
 
 Using the imputed data, on average, the person is more active during weekends than weekdays, particularly after 10am.
