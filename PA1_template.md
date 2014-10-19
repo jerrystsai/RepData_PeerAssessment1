@@ -15,7 +15,7 @@ opts_chunk$set(echo=TRUE)
 ##    a format suitable for your analysisgetw
 ##
 
-setwd("/Users/JerryTsai/userjst/individ/knowledg/cur/jhu.sph/ds05_reproducible/projects/project01/RepData_PeerAssessment1")
+## setwd("/Users/JerryTsai/userjst/individ/knowledg/cur/jhu.sph/ds05_reproducible/projects/project01/RepData_PeerAssessment1")
 
 library(plyr)
 
@@ -194,7 +194,7 @@ imputed_mean_steps_per_day <- as.integer(round(mean(imputed_by_date$steps, na.rm
 
 The mean number of steps taken per day, using imputed data, is 10,766, and the median number of steps taken per day, using imputed data, is 10,766. 
   
-The mean and median, using the imputed data, of the total number of steps each day differs from the mean and median using only actual data. Imputation has not changed the mean. It was 10,766 and remains 10,766. The median barely increased, going from  10,765 to  10,766.  
+The mean and median, using the imputed data, of the total number of steps each day barely differs from the mean and median using only actual data. Imputation has not changed the mean. It was 10,766 and remains 10,766. The median barely increased, going from  10,765 to  10,766.  
   
 After imputation, the distribution of the total number of steps taken each day became more peaked (i.e., leptokurtic). You can see this in the plot below, where the actual and imputed histograms have been overlaid. 
 
