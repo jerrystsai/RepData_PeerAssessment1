@@ -15,7 +15,7 @@ opts_chunk$set(echo=TRUE)
 ##    a format suitable for your analysisgetw
 ##
 
-## setwd("/Users/JerryTsai/userjst/individ/knowledg/cur/jhu.sph/ds05_reproducible/projects/project01/RepData_PeerAssessment1")
+setwd("/Users/JerryTsai/userjst/individ/knowledg/cur/jhu.sph/ds05_reproducible/projects/project01/RepData_PeerAssessment1")
 
 library(plyr)
 
@@ -37,7 +37,9 @@ A histogram displayed below shows the distribution of the number of steps taken 
 ## 1) Make a histogram of the total number of steps taken each day
 ##
 
-by_date <- ddply(activityDF, .(Rdate), summarize, steps=sum(steps, na.rm=TRUE))
+activityDF_noNA <- activityDF[(which(!is.na(activityDF$steps))), ]
+
+by_date <- ddply(activityDF_noNA, .(Rdate), summarize, steps=sum(steps, na.rm=TRUE))
 
 ## Alternative way of summing the steps by date,
 ## using a data.table, to check work, in case you 
@@ -68,7 +70,7 @@ median_steps_per_day <- median(by_date$steps, na.rm=TRUE)
 mean_steps_per_day <- as.integer(round(mean(by_date$steps, na.rm=TRUE)))
 ```
 
-The mean number of steps taken per day is 9,354, and the median number of steps taken per day is 10,395.  
+The mean number of steps taken per day is 10,766, and the median number of steps taken per day is 10,765.  
   
 
 ## What is the average daily activity pattern?
@@ -192,9 +194,9 @@ imputed_mean_steps_per_day <- as.integer(round(mean(imputed_by_date$steps, na.rm
 
 The mean number of steps taken per day, using imputed data, is 10,766, and the median number of steps taken per day, using imputed data, is 10,766. 
   
-The mean and median, using the imputed data, of the total number of steps each day differs from the mean and median using only actual data. Imputation has increased the mean from 9,354 to 10,766. The median also increased, from  10,395 to  10,766.  
+The mean and median, using the imputed data, of the total number of steps each day differs from the mean and median using only actual data. Imputation has not changed the mean. It was 10,766 and remains 10,766. The median barely increased, going from  10,765 to  10,766.  
   
-After imputation, the distribution of the total number of steps taken each day has generally increased. You can see this in the plot below, where the actual and imputed histograms have been overlaid. The actual distribution, which is left-skewed with a prominent bump near 0, shifts in skew toward symmetry after data are imputed for missing values.
+After imputation, the distribution of the total number of steps taken each day became more peaked (i.e., leptokurtic). You can see this in the plot below, where the actual and imputed histograms have been overlaid. 
 
 
 ```r
@@ -254,4 +256,4 @@ ggplot(by_dayFlag_interval, aes(interval, mean_steps)) +
 
 ![plot of chunk panel_plot](figure/panel_plot.png) 
 
-Using the imputed data, on average, the person is more active during weekends than weekdays, particularly after 10am.
+Using the imputed data, on average the person is more active during weekends than weekdays, particularly after 10am.
